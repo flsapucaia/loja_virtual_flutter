@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:loja_virtual_flutter/models/cart_model.dart';
+import 'package:loja_virtual_flutter/models/user_model.dart';
 import 'package:loja_virtual_flutter/ui/home_screen.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 void main() {
   runApp(MyApp());
@@ -8,12 +11,22 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Xablau Cutelaria',
-      theme: ThemeData(
-          primarySwatch: createMaterialColor(Color.fromARGB(255, 97, 97, 97)),
-          primaryColor: Color.fromARGB(255, 51, 51, 51)),
-      home: HomeScreen(),
+    return ScopedModel<UserModel>(
+        model: UserModel(),
+        child: ScopedModelDescendant<UserModel>(
+          builder: (context, child, model){
+            return ScopedModel<CartModel>(
+              model: CartModel(model),
+              child: MaterialApp(
+                title: 'Xablau Cutelaria',
+                theme: ThemeData(
+                    primarySwatch: createMaterialColor(Color.fromARGB(255, 97, 97, 97)),
+                    primaryColor: Color.fromARGB(255, 0, 69, 142)),
+                home: HomeScreen(),
+              ),
+            );
+          },
+        )
     );
   }
 }
