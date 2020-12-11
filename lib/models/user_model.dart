@@ -44,7 +44,6 @@ class UserModel extends Model{
     @required VoidCallback onSuccess, @required VoidCallback onFail}) async{
     isLoading = true;
     notifyListeners();
-
     _auth.signInWithEmailAndPassword(email: email, password: pass).then((user) async{
       firebaseUser = user;
       await _loadCurrentUser();
@@ -81,7 +80,8 @@ class UserModel extends Model{
   Future<Null> _loadCurrentUser() async{
     if(firebaseUser == null){
       firebaseUser = await _auth.currentUser();
-    } else if(firebaseUser != null){
+    }
+    if(firebaseUser != null){
       if(userData["name"] == null){
         DocumentSnapshot docUser = await Firestore.instance.collection("users").document(firebaseUser.uid).get();
         userData = docUser.data;

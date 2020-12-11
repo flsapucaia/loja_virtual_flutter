@@ -28,5 +28,5 @@ class CartProduct{
       "color" : color,
       //"product" : productData.toResumedMap()
     };
-}
+  }
 }
