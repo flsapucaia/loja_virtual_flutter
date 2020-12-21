@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:loja_virtual_flutter/datas/cart_product.dart';
 import 'package:loja_virtual_flutter/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
-//import 'package:correios_frete/correios_frete.dart';
+import 'package:correios_frete/correios_frete.dart';
 
 class CartModel extends Model{
   UserModel user;
@@ -11,6 +11,7 @@ class CartModel extends Model{
   String couponCode;
   int discountPercentage = 0;
   String cep  = "";
+  double shipPrice = 0;
 
   List<CartProduct> products = [];
 
@@ -87,17 +88,25 @@ class CartModel extends Model{
     print(this.cep);
   }
 
-  // Future<double> getShipPrice() async{              // TODO: Testar biblioteca de calculo de frete
-  //   Result result = await CalcPriceTerm("0","0","04014","40800866",cep,"1","1","20","20","20",
-  //       "0","N","N","N","xml","3");
-  //   double valor = double.parse(result.valor);
+  void calcShipPrice(String cep) async{
+    Result result = await CalcPriceTerm("","","04510","40800866",cep,"1","1","20","20","20",
+        "20","N","0","N","xml","3");
+    double valor = double.parse(result.valor.toString().replaceAll(",", "."));
+    setShipPrice(valor);
+  }
+
+  void setShipPrice(double shipPrice){
+    this.shipPrice = shipPrice;
+  }
+
+  double getShipPrice(){
+    return shipPrice;
+  }
+
+  //  double getShipPrice(){              // TODO: Testar biblioteca de calculo de frete
+  //   double valor = 9.99;
   //   return valor;
   // }
-
-   double getShipPrice(){              // TODO: Testar biblioteca de calculo de frete
-    double valor = 9.99;
-    return valor;
-  }
 
   Future<String> finishOrder() async{
     if(products.length == 0){
@@ -107,7 +116,7 @@ class CartModel extends Model{
     notifyListeners();
 
     double productsPrice = getProductsPrice();
-    double shipPrice = getShipPrice();
+    double shipPrice = this.shipPrice;
     double discount = getDiscount();
 
     DocumentReference refOrder = await Firestore.instance.collection("orders").add({
@@ -135,6 +144,8 @@ class CartModel extends Model{
     couponCode = null;
     discountPercentage = 0;
     isLoading = false;
+    cep = "";
+    shipPrice = 0;
     notifyListeners();
 
     return refOrder.documentID;

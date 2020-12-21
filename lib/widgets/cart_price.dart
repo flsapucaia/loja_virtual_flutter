@@ -17,6 +17,7 @@ class CartPrice extends StatelessWidget {
             double price = model.getProductsPrice();
             double discount = model.getDiscount();
             double ship = model.getShipPrice();
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -46,7 +47,7 @@ class CartPrice extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text("Frete"),
-                    Text("R\$ $ship")
+                    Text("R\$ ${ship.toStringAsFixed(2)}")
                   ],
                 ),
                 Divider(),
@@ -57,32 +58,32 @@ class CartPrice extends StatelessWidget {
                     Text(
                       "Total",
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15
                       ),
                     ),
                     Text(
                       "R\$ ${(price - discount + ship).toStringAsFixed(2)}",
                       style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15
                       ),
                     ),
                   ],
                 ),
                 SizedBox(height: 12,),
                 RaisedButton(
-                  child: Text("Finalizar Pedido"),
-                  textColor: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                  onPressed: buy
+                    child: Text("Finalizar Pedido"),
+                    textColor: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    onPressed: buy
                 )
               ],
             );
           },
         ),
-      ),
+        )
     );
   }
 }

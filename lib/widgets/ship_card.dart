@@ -36,9 +36,11 @@ class _ShipCardState extends State<ShipCard> {
                   border: OutlineInputBorder(),
                   hintText: "Digite seu CEP"
               ),
+              //initialValue: CartModel.of(context).cep ?? "",
               onFieldSubmitted: (cep){
                 if(cep.length == 8){
                   CartModel.of(context).setCep(cep);
+                  CartModel.of(context).calcShipPrice(cep);
                 } else{
                   Scaffold.of(context).showSnackBar(
                       SnackBar(
